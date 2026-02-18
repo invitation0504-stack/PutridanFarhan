@@ -1188,20 +1188,21 @@ function checkFade() {
 }
 
 function startInvitation() {
-  // mark opened so scroll reveals work
-  document.body.classList.add('opened');
-  const intro = document.getElementById('introOverlay');
-  if (intro) intro.style.display = 'none';
+  const audio = document.getElementById("bgAudio");
 
-  // try to play audio (user gesture required on mobile)
-  if (audioPlayer && typeof audioPlayer.play === 'function') {
-    audioPlayer.play().catch(()=>{});
+  // buka cover
+  document.querySelector('.cover').classList.add('hide');
+  document.body.classList.add('opened');
+
+  // paksa play sekali dan jangan reset lagi
+  if (audio.paused) {
+    audio.volume = 0.7;
+    audio.play().then(() => {
+      console.log("musik jalan");
+    }).catch(() => {});
   }
 
-  // staged reveal: show first few sections with small delays
-  fades.forEach((el, i) => {
-    setTimeout(() => el.classList.add('show'), i * 350 + 200);
-  });
+  startFallingLoves();
 }
 
 function attachTapHandlers() {
@@ -1362,6 +1363,7 @@ function generateShareLink(){
 
 </body>
 </html>
+
 
 
 
