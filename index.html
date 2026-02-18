@@ -1188,17 +1188,24 @@ function checkFade() {
 }
 
 function startInvitation() {
-  // mark opened so scroll reveals work
+  // buka undangan
   document.body.classList.add('opened');
   const intro = document.getElementById('introOverlay');
   if (intro) intro.style.display = 'none';
 
-  // try to play audio (user gesture required on mobile)
-  if (audioPlayer && typeof audioPlayer.play === 'function') {
-    audioPlayer.play().catch(()=>{});
+  // ambil audio langsung dari id (lebih aman)
+  const audio = document.getElementById("bgAudio");
+
+  if (audio && audio.paused) {
+    audio.volume = 0.7;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
   }
 
-  // staged reveal: show first few sections with small delays
+  // staged reveal
   fades.forEach((el, i) => {
     setTimeout(() => el.classList.add('show'), i * 350 + 200);
   });
@@ -1362,6 +1369,7 @@ function generateShareLink(){
 
 </body>
 </html>
+
 
 
 
