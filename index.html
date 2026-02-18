@@ -1164,7 +1164,6 @@ const videoSections = document.querySelectorAll('section.video-cover');
 const videoBg = videoSections[videoSections.length - 1]; // Video background (bukan cover pertama)
 
 function checkFade() {
-  // Only run reveals after user opened the invitation
   if (!document.body.classList.contains('opened')) return;
 
   fades.forEach(el => {
@@ -1174,6 +1173,26 @@ function checkFade() {
       el.classList.add('show');
     }
   });
+} 
+
+
+function startInvitation() {
+  document.body.classList.add('opened');
+  const intro = document.getElementById('introOverlay');
+  if (intro) intro.style.display = 'none';
+
+  const audio = document.getElementById("bgAudio");
+
+  if (audio && audio.paused) {
+    audio.volume = 0.7;
+    audio.play().catch(()=>{});
+  }
+
+  fades.forEach((el, i) => {
+    setTimeout(() => el.classList.add('show'), i * 350 + 200);
+  });
+}
+
 
 function startInvitation() {
   // mark opened so scroll reveals work
@@ -1350,6 +1369,7 @@ function generateShareLink(){
 
 </body>
 </html>
+
 
 
 
