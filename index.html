@@ -1102,27 +1102,20 @@ Doa restu Anda menjadi pelengkap sempurna di hari istimewa kami.
 
 <button class="btn" onclick="scrollToComments()">Konfirmasi Kehadiran</button>
 
-<div style="margin-top:30px;">
-<input type="text" id="commentName" placeholder="Nama Anda"
-style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #d4af37;border-radius:8px;">
-
-<textarea id="commentText" placeholder="Tulis ucapan atau doa..."
-style="width:100%;padding:10px;min-height:80px;border:1px solid #d4af37;border-radius:8px;"></textarea>
-
 <form id="rsvpForm" style="margin-top: 20px;">
   <input id="commentName" type="text" placeholder="Nama Anda" required
     style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #d4af37;border-radius:8px;">
+  
   <textarea id="commentText" placeholder="Tulis ucapan atau doa..." required
     style="width:100%;padding:10px;min-height:80px;border:1px solid #d4af37;border-radius:8px;"></textarea>
-  <button type="submit" class="btn">Kirim Ucapan</button>
+  
+  <button type="submit" class="btn" id="submitBtn">Kirim Ucapan</button>
 </form>
 
 <div id="commentsContainer" style="margin-top:20px;max-height:300px;overflow-y:auto;"></div>
 
 </div>
 
-<div id="commentsContainer"
-style="margin-top:20px;max-height:300px;overflow-y:auto;"></div>
 
 </div>
 </section>
@@ -1426,8 +1419,6 @@ function renderComments() {
     container.appendChild(div);
   });
 }
-
-document.addEventListener("DOMContentLoaded", renderComments);
 </script>
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycbzglVs8U9NbS6qMoQsr9RsN2AFd6lkNA45JT48G7c5Uz16sZBMSDC7ob7nNYV5-1eiC/exec";
@@ -1485,6 +1476,7 @@ loadComments();
 
 </body>
 </html>
+
 
 
 
