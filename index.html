@@ -1109,7 +1109,16 @@ style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #d4af37;borde
 <textarea id="commentText" placeholder="Tulis ucapan atau doa..."
 style="width:100%;padding:10px;min-height:80px;border:1px solid #d4af37;border-radius:8px;"></textarea>
 
-<button class="btn" onclick="addComment()">Kirim Ucapan</button>
+<form id="rsvpForm" style="margin-top: 20px;">
+  <input id="commentName" type="text" placeholder="Nama Anda" required
+    style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #d4af37;border-radius:8px;">
+  <textarea id="commentText" placeholder="Tulis ucapan atau doa..." required
+    style="width:100%;padding:10px;min-height:80px;border:1px solid #d4af37;border-radius:8px;"></textarea>
+  <button type="submit" class="btn">Kirim Ucapan</button>
+</form>
+
+<div id="commentsContainer" style="margin-top:20px;max-height:300px;overflow-y:auto;"></div>
+
 </div>
 
 <div id="commentsContainer"
@@ -1420,9 +1429,63 @@ function renderComments() {
 
 document.addEventListener("DOMContentLoaded", renderComments);
 </script>
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbzglVs8U9NbS6qMoQsr9RsN2AFd6lkNA45JT48G7c5Uz16sZBMSDC7ob7nNYV5-1eiC/exec";
+
+const form = document.getElementById("rsvpForm");
+const container = document.getElementById("commentsContainer");
+
+// Submit form ke Google Sheets
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const name = document.getElementById("commentName").value.trim();
+  const message = document.getElementById("commentText").value.trim();
+
+  if (!name || !message) return;
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: JSON.stringify({ name, message })
+  })
+  .then(() => {
+    form.reset();
+    loadComments(); // reload komentar setelah submit
+  })
+  .catch(err => console.error(err));
+});
+
+// load komentar dari Google Sheets
+function loadComments() {
+  fetch(scriptURL)
+    .then(res => res.json())
+    .then(data => {
+      container.innerHTML = "";
+      if (!data) return;
+
+      // data berupa array: [nama, pesan, waktu]
+      data.reverse().forEach(row => {
+        const div = document.createElement("div");
+        div.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+        div.style.padding = "10px 0";
+
+        div.innerHTML = `
+          <strong style="color:#d4af37">${row[0]}</strong><br>
+          <small style="color:#b0a080">${new Date(row[2]).toLocaleString()}</small>
+          <p style="margin:5px 0">${row[1]}</p>
+        `;
+        container.appendChild(div);
+      });
+    });
+}
+
+// load komentar saat pertama buka
+loadComments();
+</script>
 
 </body>
 </html>
+
 
 
 
