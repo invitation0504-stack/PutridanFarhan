@@ -1089,9 +1089,10 @@ Your browser does not support HTML5 video.
 </div>
 </div>
 
-<p style="margin-top: 20px; font-size: 0.9rem; color: #b0a080; font-style: italic;">Tidak ada kewajiban untuk memberikan hadiah.<br>Kehadiran Anda adalah keberkahan terbesar bagi kami.</p>
-</div>
-</section>
+<p style="margin-top: 20px; font-size: 0.9rem; color: #b0a080; font-style: italic; line-height: 1.6;">
+Kehadiran Anda adalah kebahagiaan dan kehormatan bagi kami.<br>
+Doa restu Anda menjadi pelengkap sempurna di hari istimewa kami.
+</p>
 
 <!-- RSVP -->
 <section class="fade">
@@ -1366,9 +1367,63 @@ function generateShareLink(){
   }).catch(()=>{});
 }
 </script>
+<script>
+function addComment() {
+  const nameInput = document.getElementById("commentName");
+  const textInput = document.getElementById("commentText");
+  const container = document.getElementById("commentsContainer");
+
+  const name = nameInput.value.trim();
+  const text = textInput.value.trim();
+
+  if (!name || !text) {
+    alert("Mohon isi nama dan ucapan terlebih dahulu.");
+    return;
+  }
+
+  const comment = {
+    name: name,
+    text: text,
+    time: new Date().toLocaleString()
+  };
+
+  let comments = JSON.parse(localStorage.getItem("weddingComments")) || [];
+  comments.unshift(comment);
+  localStorage.setItem("weddingComments", JSON.stringify(comments));
+
+  renderComments();
+
+  nameInput.value = "";
+  textInput.value = "";
+}
+
+function renderComments() {
+  const container = document.getElementById("commentsContainer");
+  container.innerHTML = "";
+
+  let comments = JSON.parse(localStorage.getItem("weddingComments")) || [];
+
+  comments.forEach(c => {
+    const div = document.createElement("div");
+    div.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+    div.style.padding = "10px 0";
+
+    div.innerHTML = `
+      <strong style="color:#d4af37">${c.name}</strong>
+      <div style="font-size:0.8rem;color:#b0a080">${c.time}</div>
+      <p style="margin:5px 0">${c.text}</p>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", renderComments);
+</script>
 
 </body>
 </html>
+
 
 
 
