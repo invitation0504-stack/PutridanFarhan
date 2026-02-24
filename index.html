@@ -1480,16 +1480,21 @@ form.addEventListener("submit", e => {
 
   if (!name || !message) return;
 
-  fetch(scriptURL, {
-    method: "POST",
-    body: JSON.stringify({ name, message })
+ fetch(scriptURL, {
+  method: "POST",
+  body: JSON.stringify({
+    name: name,
+    message: message,
+    status: document.querySelector('input[name="status"]:checked')?.value || "Belum pasti"
   })
-  .then(() => {
-    form.reset();
-    loadComments(); // reload komentar setelah submit
-  })
-  .catch(err => console.error(err));
+})
+.then(() => {
+  form.reset();
+  loadComments(); // reload komentar setelah submit
+})
+.catch(err => console.error(err));
 });
+
 
 // load komentar dari Google Sheets
 function loadComments() {
@@ -1499,15 +1504,20 @@ function loadComments() {
       container.innerHTML = "";
       if (!data) return;
 
-      // data berupa array: [nama, pesan, waktu]
+      // data berupa array: [nama, pesan, status, waktu]
       data.reverse().forEach(row => {
+
+        let icon = "❔";
+        if(row[2] === "Hadir") icon = "✔️";
+        if(row[2] === "Tidak Hadir") icon = "❌";
+
         const div = document.createElement("div");
         div.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
         div.style.padding = "10px 0";
 
         div.innerHTML = `
-          <strong style="color:#d4af37">${row[0]}</strong><br>
-          <small style="color:#b0a080">${new Date(row[2]).toLocaleString()}</small>
+          <strong style="color:#d4af37">${row[0]}</strong> ${icon}<br>
+          <small style="color:#b0a080">${new Date(row[3]).toLocaleString()}</small>
           <p style="margin:5px 0">${row[1]}</p>
         `;
         container.appendChild(div);
@@ -1532,6 +1542,7 @@ loadComments();
 }
 </body>
 </html>
+
 
 
 
