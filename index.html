@@ -1415,7 +1415,6 @@ function generateShareLink(){
 }
 </script>
 <script>
-function addComment() {
   const nameInput = document.getElementById("commentName");
   const textInput = document.getElementById("commentText");
   const container = document.getElementById("commentsContainer");
@@ -1444,7 +1443,6 @@ function addComment() {
   textInput.value = "";
 }
 
-function renderComments() {
   const container = document.getElementById("commentsContainer");
   container.innerHTML = "";
 
@@ -1465,11 +1463,6 @@ function renderComments() {
   });
 }
 </script>
-<script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbzglVs8U9NbS6qMoQsr9RsN2AFd6lkNA45JT48G7c5Uz16sZBMSDC7ob7nNYV5-1eiC/exec";
-
-const form = document.getElementById("rsvpForm");
-const container = document.getElementById("commentsContainer");
 
 // Submit form ke Google Sheets
 form.addEventListener("submit", e => {
@@ -1580,8 +1573,62 @@ function loadComments() {
 
 window.addEventListener("load", loadComments);
 </script>
+  <script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbzglVs8U9NbS6qMoQsr9RsN2AFd6lkNA45JT48G7c5Uz16sZBMSDC7ob7nNYV5-1eiC/exec";
+
+const form = document.getElementById("rsvpForm");
+const container = document.getElementById("commentsContainer");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const name = document.getElementById("commentName").value.trim();
+  const message = document.getElementById("commentText").value.trim();
+
+  if (!name || !message) {
+    alert("Mohon isi nama dan ucapan terlebih dahulu.");
+    return;
+  }
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: JSON.stringify({ name, message })
+  })
+  .then(() => {
+    form.reset();
+    loadComments();
+  })
+  .catch(err => console.error(err));
+});
+
+function loadComments() {
+  fetch(scriptURL)
+    .then(res => res.json())
+    .then(data => {
+      container.innerHTML = "";
+
+      data.reverse().forEach(c => {
+        const div = document.createElement("div");
+        div.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+        div.style.padding = "10px 0";
+
+        div.innerHTML = `
+          <strong style="color:#d4af37">${c.name}</strong>
+          <div style="font-size:0.8rem;color:#b0a080">${c.time}</div>
+          <p style="margin:5px 0">${c.message}</p>
+        `;
+
+        container.appendChild(div);
+      });
+    })
+    .catch(err => console.error(err));
+}
+
+window.addEventListener("load", loadComments);
+</script>
 </body>
 </html>
+
 
 
 
