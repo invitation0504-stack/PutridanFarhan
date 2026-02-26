@@ -1456,12 +1456,7 @@ form.addEventListener("submit", e => {
 
   const name = document.getElementById("commentName").value.trim();
   const message = document.getElementById("commentText").value.trim();
-  const status = document.querySelector('input[name="kehadiran"]:checked')?.value || "Ragu";
-
-fetch(scriptURL, {
-  method: "POST",
-  body: JSON.stringify({ name, message, status })
-})
+  const kehadiran = document.querySelector('input[name="kehadiran"]:checked')?.value || "Ragu";
 
   if (!name || !message) {
     alert("Mohon isi nama dan ucapan terlebih dahulu.");
@@ -1470,7 +1465,7 @@ fetch(scriptURL, {
 
   fetch(scriptURL, {
     method: "POST",
-    body: JSON.stringify({ name, message, status })
+    body: JSON.stringify({ name, message, kehadiran })
   })
   .then(() => {
     form.reset();
@@ -1489,10 +1484,13 @@ function loadComments() {
       data.reverse().forEach(c => {
 
         let icon = "";
+        if (c.kehadiran === "Hadir") icon = "✔️";
+        else if (c.kehadiran === "Tidak Hadir") icon = "❌";
+        else if (c.kehadiran === "Ragu") icon = "❓";
 
-if (c.kehadiran === "Hadir") icon = "✔️";
-else if (c.kehadiran === "Tidak Hadir") icon = "❌";
-else if (c.kehadiran === "Ragu") icon = "❓";
+        const div = document.createElement("div");
+        div.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
+        div.style.padding = "10px 0";
 
         div.innerHTML = `
           <strong style="color:#d4af37">${c.name}</strong> ${icon}
@@ -1510,6 +1508,7 @@ window.addEventListener("load", loadComments);
 </script>
 </body>
 </html>
+
 
 
 
