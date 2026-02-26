@@ -1433,21 +1433,11 @@ function generateShareLink(){
     time: new Date().toLocaleString()
   };
 
-  let comments = JSON.parse(localStorage.getItem("weddingComments")) || [];
-  comments.unshift(comment);
-  localStorage.setItem("weddingComments", JSON.stringify(comments));
+ let comments = JSON.parse(localStorage.getItem("weddingComments")) || [];
 
-  renderComments();
+comments.push(comment);
 
-  nameInput.value = "";
-  textInput.value = "";
-}
-
-  const container = document.getElementById("commentsContainer");
-  container.innerHTML = "";
-
-  let comments = JSON.parse(localStorage.getItem("weddingComments")) || [];
-
+localStorage.setItem("weddingComments", JSON.stringify(comments));
   comments.forEach(c => {
     const div = document.createElement("div");
     div.style.borderBottom = "1px solid rgba(212,175,55,0.3)";
@@ -1628,6 +1618,7 @@ window.addEventListener("load", loadComments);
 </script>
 </body>
 </html>
+
 
 
 
