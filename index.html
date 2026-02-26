@@ -1456,7 +1456,12 @@ form.addEventListener("submit", e => {
 
   const name = document.getElementById("commentName").value.trim();
   const message = document.getElementById("commentText").value.trim();
-  const status = document.querySelector('input[name="kehadiran"]:checked')?.value || "Belum pasti";
+  const status = document.querySelector('input[name="kehadiran"]:checked')?.value || "Ragu";
+
+fetch(scriptURL, {
+  method: "POST",
+  body: JSON.stringify({ name, message, status })
+})
 
   if (!name || !message) {
     alert("Mohon isi nama dan ucapan terlebih dahulu.");
@@ -1507,6 +1512,7 @@ window.addEventListener("load", loadComments);
 </script>
 </body>
 </html>
+
 
 
 
